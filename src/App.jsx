@@ -1,23 +1,20 @@
-import { useState, useEffect } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
-import axios from 'axios'
+import Nav from './components/Nav'
+import Home from './page/Home'
+import Inventory from './page/Inventory'
+import Recipe from './page/Recipe'
 
 
 function App() {
-  let key = import.meta.env.VITE_apiKey
-  useEffect(()=>{
-    async function spoonacular() {
-      let response = await axios.get()
-    }
-  },[])
-  const [count, setCount] = useState(0)
-
-
-  return (
+    return (
     <>
-      
+      <Nav />
+      <Routes >
+        <Route path='/' element={<Home />} />
+        <Route path='/inventory' element={<Inventory />} />
+        <Route path='/recipe' element={<Recipe />} />
+      </Routes>
     </>
   )
 }

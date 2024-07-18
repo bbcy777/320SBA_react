@@ -12,3 +12,6 @@ Other than homepage introducing the app, there is food inventory page and recipe
 2. Recipe suggestions page: 
 - Suggest recipes based on the ingredients available in user's inventory.
 - provide tips on reducing food waste.
+
+resources:
+[icons8](https://icons8.com/)
