@@ -1,13 +1,16 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import {BrowserRouter} from 'react-router-dom'
+import IngredientProvider from './contexts/Context.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <IngredientProvider>
+        <App />
+      </IngredientProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )
