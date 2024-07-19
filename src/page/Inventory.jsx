@@ -2,10 +2,11 @@ import React, { useState, useReducer, useRef } from 'react'
 
 function reducer(state, action) {
   switch(action.type) {
-    case 'set':
-      return action.payload
     case('edit'): 
-      return state.map(ingredient => ingredient.id === action.id? {...ingredients, title: action.payload.title, completed: action.payload.completed} : ingredients)
+      return state.map(ingredient => 
+        ingredient.id === action.payload.id
+        ? {...ingredient, title: action.payload.title} 
+        : ingredient)
     case('delete'):
       return state.filter(ingredient => ingredient.id !== action.payload.id)
     case('add'):
@@ -15,10 +16,12 @@ function reducer(state, action) {
   }
 }
 const Inventory = () => {
-  const [ingredients, setIngredients] = useReducer(reducer, []);
+  const [ingredients, dispatch] = useReducer(reducer, []);
   const [newItem, setNewItem] = useState('');
-  const [isDisabled, setIsDisable] = useState (true)
-  
+  const [editTitle, setEditTitle] = useState('')
+  const [editId, setEditId] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
+
   function handleChange(e) {
     setNewItem(e.target.value)
   }
@@ -32,7 +35,7 @@ const Inventory = () => {
     const newItem = {
       id: ingredients.length + 1,
       title: value, 
-      date: new Date(),
+      // date: new Date(),
     }
     dispatch({type: 'add', payload: newItem})
   }
@@ -41,34 +44,21 @@ const Inventory = () => {
     dispatch({type: 'delete', payload: {id}})
   }
 
-  function updateItem(id, value, completed) {
-    dispatch({type: 'edit', payload: {id, value, completed}})
+  function updateItem(id, title) {
+    dispatch({type: 'edit', payload: {id, title}})
   }
 
   const checkRef=useRef()
   function handleCheck(e) {
     const isChecked = e.target.checked
     console.log(isChecked);
-    setCheck(isChecked)
-    //update the todo item in the parent component
-    updateItem(list.id, editTitle, isChecked)
-    // display or show delete button according to completed status
-    setIsDisable(!isChecked)
-    console.log(list);
+
   }
 
-  const titleRef = useRef()
-  // console.log(titleRef)
 
-  const deleteRef = useRef()
-  const todoRef = useRef()
-  const [saveButton, setSaveButton] = useState(false)
 
-  function handleEdit(e) {
-    titleRef.current.style.display = "none"
-    deleteRef.current.style.display = "none"
-    todoRef.current.style.display = "none"
-    setSaveButton(true)
+  function handleEdit(id) {
+    setEditId(id)
   }
 
   function updateEdit(e) {
@@ -76,45 +66,53 @@ const Inventory = () => {
     // console.log(e.target.value);
   }
 
-  function updateTitle() {
+  function updateTitle(id) {
     // console.log(editTitle);
-    updateItem(list.id, editTitle, check)
-    titleRef.current.style.display = "block"
-    deleteRef.current.style.display = "block"
-    todoRef.current.style.display = "block"
-    setSaveButton(false)
+    updateItem(id, editTitle)
+    setEditId(null)
   }
 
+function handleSubmit() {
+  
+}
 
   return (
-    <div>
+    <>
       <div className='addItem'>
-        <form action="">
+        <form onSubmit={handleAdd}>
             <input type="text" onChange={handleChange} value={newItem}/>
-            <button onClick={handleAdd}>Add</button>
+            <button type='submit'>Add</button>
         </form>
       </div>
       <ul>
-        <li>
-          <input type="checkbox" />
-          <input type="text" placeholder='item name' value={newItem.name}/>
-          <button onClick={handleAdd}>Add Item</button>
-          <label className='todoList'>
-          {/* <input ref={checkRef}type="checkbox" onChange={handleCheck} checked={check}/> */}
-          <div ref={todoRef}>{ingredients}</div>
-          <button ref={titleRef} onClick={handleEdit}>Edit</button>
-          <button ref={deleteRef} disabled={isDisabled} onClick={()=>removeItem(list.id)}>Delete</button>
-          {saveButton && (
-            <>
-              <input type='text' placeholder={list.title} onChange={updateEdit}/>
-              <button onClick={updateTitle}>Save</button> 
-            </>
-          )}
-        </label> 
+        {ingredients.map((ingredient) => (
+        <li key={ingredient.id}>
+            <label className="ingredientList">
+              <input type="checkbox" onChange={handleCheck}/>
+              {editId === ingredient.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={updateEdit}
+                  />
+                  <button onClick={() => updateTitle(ingredient.id)}>Save</button>
+                </>
+              ) : (
+                <>
+                  <div>{ingredient.title}</div>
+                  <button onClick={() => handleEdit(ingredient.id, ingredient.title)}>Edit</button>
+                  <button onClick={() => removeItem(ingredient.id)}>
+                    Delete
+                  </button>
+                </>
+              )}
+            </label>
         </li>
-
+      ))}
       </ul>
-    </div>
+      <button onClick={handleSubmit}>Get Recipes!</button>
+    </>
   )
 }
 
