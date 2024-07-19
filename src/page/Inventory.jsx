@@ -1,4 +1,6 @@
-import React, { useState, useReducer, useRef } from 'react'
+import React, { useState, useReducer, useContext } from 'react'
+import {IngredientsContext} from '../contexts/Context'
+import { Link } from 'react-router-dom'
 
 function reducer(state, action) {
   switch(action.type) {
@@ -16,10 +18,9 @@ function reducer(state, action) {
   }
 }
 const Inventory = () => {
-  const [ingredients, dispatch] = useReducer(reducer, []);
+  const [inventory, dispatch] = useReducer(reducer, []);
   const [newItem, setNewItem] = useState('');
-  const [editTitle, setEditTitle] = useState('')
-  const [editId, setEditId] = useState(false)
+  const [editInfo, setEditInfo] = useState({id: null, title: ''})
   const [isChecked, setIsChecked] = useState(false)
 
   function handleChange(e) {
@@ -27,15 +28,15 @@ const Inventory = () => {
   }
   function handleAdd(e) {
     e.preventDefault()
+    if (newItem.trim() === '') return;
     addItem(newItem)
     setNewItem('')
   }
 
   function addItem(value) {
     const newItem = {
-      id: ingredients.length + 1,
-      title: value, 
-      // date: new Date(),
+      id: inventory.length + 1,
+      title: value.trim(), 
     }
     dispatch({type: 'add', payload: newItem})
   }
@@ -44,36 +45,21 @@ const Inventory = () => {
     dispatch({type: 'delete', payload: {id}})
   }
 
-  function updateItem(id, title) {
-    dispatch({type: 'edit', payload: {id, title}})
-  }
-
-  const checkRef=useRef()
-  function handleCheck(e) {
-    const isChecked = e.target.checked
-    console.log(isChecked);
-
-  }
-
-
-
-  function handleEdit(id) {
-    setEditId(id)
-  }
-
   function updateEdit(e) {
-    setEditTitle(e.target.value)
-    // console.log(e.target.value);
+    setEditInfo({...editInfo, title: e.target.value})
   }
 
-  function updateTitle(id) {
-    // console.log(editTitle);
-    updateItem(id, editTitle)
-    setEditId(null)
+  function handleEdit(id, title) {
+    setEditInfo({id, title})
+  }
+
+  function updateTitle() {
+    dispatch({type: 'edit', payload: {id: editInfo.id, title: editInfo.title}})
+    setEditInfo({ id: null, title: ''})
   }
 
 function handleSubmit() {
-  
+  const selectedIngredients = state.selectedIngredients;
 }
 
   return (
@@ -85,18 +71,18 @@ function handleSubmit() {
         </form>
       </div>
       <ul>
-        {ingredients.map((ingredient) => (
+        {inventory.map((ingredient) => (
         <li key={ingredient.id}>
             <label className="ingredientList">
-              <input type="checkbox" onChange={handleCheck}/>
-              {editId === ingredient.id ? (
+              <input type="checkbox"/>
+              {editInfo === ingredient.id ? (
                 <>
                   <input
                     type="text"
-                    value={editTitle}
-                    onChange={updateEdit}
+                    value={editInfo.title}
+                    onChange={(e) => updateEdit(e)}
                   />
-                  <button onClick={() => updateTitle(ingredient.id)}>Save</button>
+                  <button onClick={updateTitle}>Save</button>
                 </>
               ) : (
                 <>
@@ -111,7 +97,9 @@ function handleSubmit() {
         </li>
       ))}
       </ul>
-      <button onClick={handleSubmit}>Get Recipes!</button>
+      <Link to='/recipe' >
+        <button onClick={handleSubmit}>Get Recipes!</button>
+      </Link>
     </>
   )
 }
