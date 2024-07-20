@@ -22,6 +22,7 @@ const Inventory = () => {
   const [newItem, setNewItem] = useState('');
   const [editInfo, setEditInfo] = useState({id: null, title: ''})
   const [isChecked, setIsChecked] = useState(false)
+  const {setSelectedIngredients} = useContext(IngredientsContext)
 
   function handleChange(e) {
     setNewItem(e.target.value)
@@ -58,9 +59,14 @@ const Inventory = () => {
     setEditInfo({ id: null, title: ''})
   }
 
-function handleSubmit() {
-  const selectedIngredients = state.selectedIngredients;
-}
+  function handleAllSubmit() {
+    setSelectedIngredients(inventory)
+  }
+  function handleSubmit() {
+    const selectedIngredients = inventory.filter((ingredient) => ingredient.isChecked);
+    console.log(selectedIngredients);
+    setSelectedIngredients(selectedIngredients)
+  }
 
   return (
     <>
@@ -72,9 +78,15 @@ function handleSubmit() {
       </div>
       <ul>
         {inventory.map((ingredient) => (
-        <li key={ingredient.id}>
+        <li key={ingredient.id}  className='list'> 
             <label className="ingredientList">
-              <input type="checkbox"/>
+              <input 
+                type="checkbox" 
+                checked={ingredient.isChecked || false}
+                onChange={()=>{
+                  ingredient.isChecked = !ingredient.isChecked;
+                  setIsChecked(!isChecked)
+                }}/>
               {editInfo === ingredient.id ? (
                 <>
                   <input
@@ -98,7 +110,8 @@ function handleSubmit() {
       ))}
       </ul>
       <Link to='/recipe' >
-        <button onClick={handleSubmit}>Get Recipes!</button>
+        <button onClick={handleAllSubmit}>Select All and explore Recipe</button>
+        <button onClick={handleSubmit}>Get Recipes with Selected List</button>
       </Link>
     </>
   )

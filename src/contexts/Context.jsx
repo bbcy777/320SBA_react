@@ -1,10 +1,11 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useState } from "react";
 
 export const IngredientsContext = createContext(null);
 
-export default function IngredientProvider( {children, ingredient}) {
+export default function IngredientProvider( {children}) {
+    const [selectedIngredients, setSelectedIngredients] = useState([])
     return(
-        <IngredientsContext.Provider value={ingredient} >
+        <IngredientsContext.Provider value={{selectedIngredients, setSelectedIngredients}} >
             {children}
         </IngredientsContext.Provider>
     )
