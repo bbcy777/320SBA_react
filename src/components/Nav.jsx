@@ -9,14 +9,14 @@ const Nav = () => {
             <p>Repurpose Kitchen</p>
         </div>
         </Link>
-        <div id="navLink">
+        <ul id="navLink">
             <Link to ='/inventory'>
-                <div>Food Inventory</div>
+                <li className="navLink">Food Inventory</li>
             </Link>
             <Link to ='/recipes'>
-                <div>Recipes</div>
+                <li className="navLink">Recipes</li>
             </Link>
-        </div>
+        </ul>
     </nav>
   )
 }

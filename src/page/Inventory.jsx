@@ -46,9 +46,6 @@ const Inventory = () => {
     dispatch({type: 'delete', payload: {id}})
   }
 
-  function updateEdit(e) {
-    setEditInfo({...editInfo, title: e.target.value})
-  }
 
   function handleEdit(id, title) {
     setEditInfo({id, title})
@@ -70,6 +67,7 @@ const Inventory = () => {
 
   return (
     <>
+      <h2>What's in your fridge?</h2>
       <div className='addItem'>
         <form onSubmit={handleAdd}>
             <input type="text" onChange={handleChange} value={newItem}/>
@@ -87,12 +85,12 @@ const Inventory = () => {
                   ingredient.isChecked = !ingredient.isChecked;
                   setIsChecked(!isChecked)
                 }}/>
-              {editInfo === ingredient.id ? (
+              {editInfo.id === ingredient.id ? (
                 <>
                   <input
                     type="text"
                     value={editInfo.title}
-                    onChange={(e) => updateEdit(e)}
+                    onChange={(e) => setEditInfo({...editInfo, title: e.target.value})}
                   />
                   <button onClick={updateTitle}>Save</button>
                 </>

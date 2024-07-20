@@ -1,4 +1,5 @@
 #root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -8,14 +9,38 @@
 
 .nav {
   display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  font-weight: 500;
+  background-color: rgba(240, 240, 220, 80%);
 }
 
-/* #navLogo {
-  margin-left: auto;
-} */
+a {
+  text-decoration: none;
+}
 
-#navDiv, #navLogo {
+a:hover {
+  color: #646cff;
+}
+
+#navLogo {
   display: flex;
+  margin-left: 50px;
+  flex-direction: row;
+}
+
+#navLink {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  margin-right: 50px;
+}
+
+.navLink {
+  margin-right: 30px;
+  list-style: none;
 }
 
 .list {
@@ -44,3 +69,19 @@ button:hover {
   border-color: #646cff;
 }
 
+.recipeCards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cardItem img {
+  width: 500px;
+}
+
+.cardItem {
+  margin: 1rem;
+}
+
+.addItem {
+  margin-top: 50px;
+}
